@@ -8,11 +8,20 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SetupRouteImport } from './routes/setup'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as AuthIndexRouteImport } from './routes/_auth/index'
+import { Route as AuthSettingsSessionsIndexRouteImport } from './routes/_auth/settings/sessions/index'
+import { Route as AuthSettingsSessionsSessionLayoutRouteImport } from './routes/_auth/settings/sessions/$session/_layout'
+import { Route as AuthSettingsSessionsSessionLayoutIndexRouteImport } from './routes/_auth/settings/sessions/$session/_layout.index'
+
+const AuthSettingsSessionsSessionRouteImport = createFileRoute(
+  '/_auth/settings/sessions/$session',
+)()
 
 const SetupRoute = SetupRouteImport.update({
   id: '/setup',
@@ -33,16 +42,44 @@ const AuthIndexRoute = AuthIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthRoute,
 } as any)
+const AuthSettingsSessionsSessionRoute =
+  AuthSettingsSessionsSessionRouteImport.update({
+    id: '/settings/sessions/$session',
+    path: '/settings/sessions/$session',
+    getParentRoute: () => AuthRoute,
+  } as any)
+const AuthSettingsSessionsIndexRoute =
+  AuthSettingsSessionsIndexRouteImport.update({
+    id: '/settings/sessions/',
+    path: '/settings/sessions/',
+    getParentRoute: () => AuthRoute,
+  } as any)
+const AuthSettingsSessionsSessionLayoutRoute =
+  AuthSettingsSessionsSessionLayoutRouteImport.update({
+    id: '/_layout',
+    getParentRoute: () => AuthSettingsSessionsSessionRoute,
+  } as any)
+const AuthSettingsSessionsSessionLayoutIndexRoute =
+  AuthSettingsSessionsSessionLayoutIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthSettingsSessionsSessionLayoutRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
   '/': typeof AuthIndexRoute
+  '/settings/sessions': typeof AuthSettingsSessionsIndexRoute
+  '/settings/sessions/$session': typeof AuthSettingsSessionsSessionLayoutRouteWithChildren
+  '/settings/sessions/$session/': typeof AuthSettingsSessionsSessionLayoutIndexRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
   '/': typeof AuthIndexRoute
+  '/settings/sessions': typeof AuthSettingsSessionsIndexRoute
+  '/settings/sessions/$session': typeof AuthSettingsSessionsSessionLayoutIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -50,13 +87,37 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/setup': typeof SetupRoute
   '/_auth/': typeof AuthIndexRoute
+  '/_auth/settings/sessions/': typeof AuthSettingsSessionsIndexRoute
+  '/_auth/settings/sessions/$session': typeof AuthSettingsSessionsSessionRouteWithChildren
+  '/_auth/settings/sessions/$session/_layout': typeof AuthSettingsSessionsSessionLayoutRouteWithChildren
+  '/_auth/settings/sessions/$session/_layout/': typeof AuthSettingsSessionsSessionLayoutIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/login' | '/setup' | '/'
+  fullPaths:
+    | '/login'
+    | '/setup'
+    | '/'
+    | '/settings/sessions'
+    | '/settings/sessions/$session'
+    | '/settings/sessions/$session/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/setup' | '/'
-  id: '__root__' | '/_auth' | '/login' | '/setup' | '/_auth/'
+  to:
+    | '/login'
+    | '/setup'
+    | '/'
+    | '/settings/sessions'
+    | '/settings/sessions/$session'
+  id:
+    | '__root__'
+    | '/_auth'
+    | '/login'
+    | '/setup'
+    | '/_auth/'
+    | '/_auth/settings/sessions/'
+    | '/_auth/settings/sessions/$session'
+    | '/_auth/settings/sessions/$session/_layout'
+    | '/_auth/settings/sessions/$session/_layout/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -95,15 +156,78 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthIndexRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/_auth/settings/sessions/$session': {
+      id: '/_auth/settings/sessions/$session'
+      path: '/settings/sessions/$session'
+      fullPath: '/settings/sessions/$session'
+      preLoaderRoute: typeof AuthSettingsSessionsSessionRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/settings/sessions/': {
+      id: '/_auth/settings/sessions/'
+      path: '/settings/sessions'
+      fullPath: '/settings/sessions'
+      preLoaderRoute: typeof AuthSettingsSessionsIndexRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/settings/sessions/$session/_layout': {
+      id: '/_auth/settings/sessions/$session/_layout'
+      path: '/settings/sessions/$session'
+      fullPath: '/settings/sessions/$session'
+      preLoaderRoute: typeof AuthSettingsSessionsSessionLayoutRouteImport
+      parentRoute: typeof AuthSettingsSessionsSessionRoute
+    }
+    '/_auth/settings/sessions/$session/_layout/': {
+      id: '/_auth/settings/sessions/$session/_layout/'
+      path: '/'
+      fullPath: '/settings/sessions/$session/'
+      preLoaderRoute: typeof AuthSettingsSessionsSessionLayoutIndexRouteImport
+      parentRoute: typeof AuthSettingsSessionsSessionLayoutRoute
+    }
   }
 }
 
+interface AuthSettingsSessionsSessionLayoutRouteChildren {
+  AuthSettingsSessionsSessionLayoutIndexRoute: typeof AuthSettingsSessionsSessionLayoutIndexRoute
+}
+
+const AuthSettingsSessionsSessionLayoutRouteChildren: AuthSettingsSessionsSessionLayoutRouteChildren =
+  {
+    AuthSettingsSessionsSessionLayoutIndexRoute:
+      AuthSettingsSessionsSessionLayoutIndexRoute,
+  }
+
+const AuthSettingsSessionsSessionLayoutRouteWithChildren =
+  AuthSettingsSessionsSessionLayoutRoute._addFileChildren(
+    AuthSettingsSessionsSessionLayoutRouteChildren,
+  )
+
+interface AuthSettingsSessionsSessionRouteChildren {
+  AuthSettingsSessionsSessionLayoutRoute: typeof AuthSettingsSessionsSessionLayoutRouteWithChildren
+}
+
+const AuthSettingsSessionsSessionRouteChildren: AuthSettingsSessionsSessionRouteChildren =
+  {
+    AuthSettingsSessionsSessionLayoutRoute:
+      AuthSettingsSessionsSessionLayoutRouteWithChildren,
+  }
+
+const AuthSettingsSessionsSessionRouteWithChildren =
+  AuthSettingsSessionsSessionRoute._addFileChildren(
+    AuthSettingsSessionsSessionRouteChildren,
+  )
+
 interface AuthRouteChildren {
   AuthIndexRoute: typeof AuthIndexRoute
+  AuthSettingsSessionsIndexRoute: typeof AuthSettingsSessionsIndexRoute
+  AuthSettingsSessionsSessionRoute: typeof AuthSettingsSessionsSessionRouteWithChildren
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
   AuthIndexRoute: AuthIndexRoute,
+  AuthSettingsSessionsIndexRoute: AuthSettingsSessionsIndexRoute,
+  AuthSettingsSessionsSessionRoute:
+    AuthSettingsSessionsSessionRouteWithChildren,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)

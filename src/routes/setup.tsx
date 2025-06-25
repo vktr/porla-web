@@ -17,6 +17,11 @@ function RouteComponent() {
     mutationKey: ["auth-init"],
   });
 
+  const authLogin = useMutation({
+    mutationFn: (data: any) => axios.post("/api/v1/auth/login", data),
+    mutationKey: ["auth-login"]
+  });
+
   const form = useAppForm({
     defaultValues: {
       username: "",
@@ -24,7 +29,9 @@ function RouteComponent() {
     },
     onSubmit: async ({ value }) => {
       await authInit.mutateAsync(value);
-      await navigate({ to: "/login" });
+      await authLogin.mutateAsync(value);
+
+      await navigate({ to: "/" });
     },
   });
 

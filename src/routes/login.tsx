@@ -1,14 +1,18 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
 
 import { useAppForm } from "@/hooks/form";
 import { Suspense } from "react";
+import { useAuthLogin } from "@/api/auth";
 
 export const Route = createFileRoute("/login")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const authLogin = useAuthLogin();
+  const navigate = useNavigate();
+
   const form = useAppForm({
     defaultValues: {
       username: "",
@@ -20,8 +24,9 @@ function RouteComponent() {
         password: z.string(),
       }),
     },
-    onSubmit: ({ value }) => {
-      alert(JSON.stringify(value, null, 2));
+    onSubmit: async ({ value }) => {
+      await authLogin.mutateAsync(value);
+      await navigate({ to: "/" });
     },
   });
 

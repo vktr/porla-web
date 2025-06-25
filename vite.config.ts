@@ -3,6 +3,7 @@ import { defineConfig } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import react from '@vitejs/plugin-react'
+import svgr from "vite-plugin-svgr";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -12,7 +13,8 @@ export default defineConfig({
       autoCodeSplitting: true,
     }),
     react(),
-    tailwindcss()
+    tailwindcss(),
+    svgr()
   ],
   resolve: {
     alias: {
