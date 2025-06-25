@@ -16,12 +16,13 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@/components/*': path.resolve(__dirname, './src/components/')
+      '@': path.resolve(__dirname, './src')
     },
   },
   server: {
     proxy: {
       '/api': 'http://127.0.0.1:1337'
-    }
+    },
+    host: '127.0.0.1'
   },
 })

@@ -1,32 +1,35 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { z } from "zod";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { Suspense } from "react";
+import { useMutation } from "@tanstack/react-query";
 
 import { useAppForm } from "@/hooks/form";
-import { Suspense } from "react";
+import axios from "axios";
 
-export const Route = createFileRoute("/login")({
+export const Route = createFileRoute("/setup")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+  const navigate = useNavigate();
+
+  const authInit = useMutation({
+    mutationFn: (data: any) => axios.post("/api/v1/auth/init", data),
+    mutationKey: ["auth-init"],
+  });
+
   const form = useAppForm({
     defaultValues: {
       username: "",
       password: "",
     },
-    validators: {
-      onChange: z.object({
-        username: z.string(),
-        password: z.string(),
-      }),
-    },
-    onSubmit: ({ value }) => {
-      alert(JSON.stringify(value, null, 2));
+    onSubmit: async ({ value }) => {
+      await authInit.mutateAsync(value);
+      await navigate({ to: "/login" });
     },
   });
 
   return (
-    <Suspense fallback={<p>Loading...</p>}>
+    <Suspense fallback={<p>Loading setup form</p>}>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -44,7 +47,7 @@ function RouteComponent() {
         />
 
         <form.AppForm>
-          <form.SubmitButton label="Sign in" />
+          <form.SubmitButton label="Create user account" />
         </form.AppForm>
       </form>
     </Suspense>
