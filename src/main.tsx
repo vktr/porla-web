@@ -1,20 +1,21 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { RouterProvider, createRouter } from '@tanstack/react-router'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { RouterProvider, createRouter } from "@tanstack/react-router";
 
-import { routeTree } from './routeTree.gen'
+import { routeTree } from "./routeTree.gen";
 
-import './index.css'
+import "./i18n";
+import "./index.css";
 
-const router = createRouter({ routeTree })
+const router = createRouter({ routeTree });
 
 // Register the router instance for type safety
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface Register {
-    router: typeof router
+    router: typeof router;
   }
 }
-const rootElement = document.getElementById('root')!;
+const rootElement = document.getElementById("root")!;
 
 if (!rootElement.innerHTML) {
   const root = createRoot(rootElement);
@@ -22,6 +23,6 @@ if (!rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <RouterProvider router={router} />
-    </StrictMode>,
+    </StrictMode>
   );
 }

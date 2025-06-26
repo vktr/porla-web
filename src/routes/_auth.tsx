@@ -45,11 +45,11 @@ function Versions() {
 
 function MainLayout() {
   return (
-    <div className="grid grid-cols-12 h-full">
-      <div className="col-span-2 h-full">
+    <div className="grid grid-cols-[250px_auto] h-full">
+      <div className="h-full">
         <Sidebar />
       </div>
-      <div className="col-span-10">
+      <div className="overflow-scroll">
         <Outlet />
       </div>
     </div>

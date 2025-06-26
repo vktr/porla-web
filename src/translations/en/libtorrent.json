@@ -1,0 +1,11 @@
+{
+  "descriptions": {
+    "active_checking": "The limit of number of simultaneous checking torrents.",
+    "active_dht_limit": "The max number of torrents to announce to the DHT.",
+    "announce_ip": "The IP address passed along to trackers as the ``&ip=`` parameter. If left as the default, that parameter is omitted.<br/><br/>This setting is only meant for very special cases where a seed is running on the same host as the tracker, and the tracker accepts the IP parameter (which normal trackers don't). Do not set this option unless you also control the tracker.",
+    "handshake_client_version": "the client name and version identifier sent to peers in the handshake message. If this is an empty string, the user_agent is used instead. This string must be a UTF-8 encoded unicode string.",
+    "i2p_hostname": "The i2p_ SAM bridge to connect to. set the port with the ``i2p_port`` setting. Unless this is set, i2p torrents are not supported. This setting is separate from the other proxy settings since i2p torrents and their peers are orthogonal. You can have i2p peers as well as regular peers via a proxy.",
+    "peer_fingerprint": "The fingerprint for the client. It will be used as the prefix to the peer_id. If this is 20 bytes (or longer) it will be truncated to 20 bytes and used as the entire peer-id",
+    "user_agent": "The client identification to the tracker. The recommended format of this string is: \"client-name/client-version libtorrent/libtorrent-version\". This name will not only be used when making HTTP requests, but also when sending extended headers to peers that support that extension. It may not contain \r or \n"
+  }
+}
